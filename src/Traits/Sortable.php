@@ -16,9 +16,10 @@ trait Sortable {
             $direction = $this->getSortingDirection();
         }
 
+        $sortFields = $this->getSortable();
         if(
-            !isset($this->sortable) || // are sortables present?
-            !is_array($this->sortable) // are the sortables an array?
+            !$sortFields || // are sortables present?
+            !is_array($sortFields) // are the sortables an array?
         )
         {
             // If we tried to sort a Model which can't be sorted, fail loudly.
@@ -29,9 +30,9 @@ trait Sortable {
         $sortFunctionName = 'sort' . studly_case($field);
 
         // does $field appear as a VALUE in list of known sortables?
-        $isValueOfSortable = in_array($field, (array) $this->sortable);
+        $isValueOfSortable = in_array($field, (array) $this->$sortFields);
         // does $field appear as a KEY in list of known sortables?
-        $isKeyOfSortable = isset($this->sortable[$field]);
+        $isKeyOfSortable = isset($sortFields[$field]);
         // is there a custom function for sorting this column?
         $isCallableFunction = method_exists($this, $sortFunctionName);
 
@@ -59,7 +60,7 @@ trait Sortable {
         if($isKeyOfSortable)
         {
             // Set via key
-            $sortField = $this->sortable[$field];
+            $sortField = $sortFields[$field];
         }
 
         // At this point, all should be well, continue.
