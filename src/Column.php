@@ -276,7 +276,7 @@ class Column
 
         return $this;
     }
-    
+
     public function setClasses($class)
     {
         $this->classes = explode(" ", $class);
@@ -289,7 +289,13 @@ class Column
      */
     public function getClasses()
     {
-        return $this->classes;
+        $classes = $this->classes;
+        if ($this->isSorted()) {
+            $classes[] = 'sorted';
+            $classes[] = 'sorted-' . $this->getDirection();
+        }
+
+        return $classes;
     }
 
     /**
@@ -297,6 +303,6 @@ class Column
      */
     public function getClassString()
     {
-        return implode(' ', array_filter($this->classes));
+        return implode(' ', array_filter($this->getClasses()));
     }
 }

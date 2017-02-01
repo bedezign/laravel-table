@@ -1,5 +1,6 @@
 <?php namespace Gbrock\Table\Traits;
 
+use Gbrock\Table\Exceptions\ModelMissingSortableArrayException;
 use Illuminate\Support\Facades\Request;
 
 trait Sortable {
@@ -23,14 +24,14 @@ trait Sortable {
         )
         {
             // If we tried to sort a Model which can't be sorted, fail loudly.
-            throw new ModelMissingSortableArrayException;
+            throw new ModelMissingSortableArrayException();
         }
 
         // The name of the custom function (which may or may not exist) which sorts this field
         $sortFunctionName = 'sort' . studly_case($field);
 
         // does $field appear as a VALUE in list of known sortables?
-        $isValueOfSortable = in_array($field, (array) $this->$sortFields);
+        $isValueOfSortable = in_array($field, (array) $sortFields);
         // does $field appear as a KEY in list of known sortables?
         $isKeyOfSortable = isset($sortFields[$field]);
         // is there a custom function for sorting this column?
