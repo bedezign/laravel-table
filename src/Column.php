@@ -82,9 +82,12 @@ class Column
             return $this;
         }
 
-        if ($model->is_sortable && in_array($this->getField(), $model->getSortable())) {
-            // The model dictates that this column should be sortable
-            $this->setSortable(true);
+        if ($model->is_sortable) {
+            $sortableFields = $model->getSortable();
+            // Depending on how the user specified the fields it can be either key or value
+            if (array_key_exists($this->getField(), $sortableFields) || in_array($this->getField(), $sortableFields))
+                // The model dictates that this column should be sortable
+                $this->setSortable(true);
         }
 
         $this->model = $model;
